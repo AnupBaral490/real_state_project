@@ -1,0 +1,159 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}{{ agent.user.get_full_name|default:agent.user.username }} - RealEstate Pro{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Agent Header -->
+    <div class="card shadow-lg mb-5">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-3 text-center mb-4 mb-md-0">
+                    {% if agent.profile_image %}
+                        <img src="{{ agent.profile_image.url }}" class="rounded-circle mb-3" width="150" alt="{{ agent.user.get_full_name }}">
+                    {% else %}
+                        <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center mb-3" style="width: 150px; height: 150px;">
+                            <i class="fas fa-user text-white" style="font-size: 80px;"></i>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="col-md-9">
+                    <h2 class="fw-bold mb-2">{{ agent.user.get_full_name|default:agent.user.username }}</h2>
+                    
+                    <div class="mb-3">
+                        <i class="fas fa-star text-warning me-1"></i>
+                        <span class="fw-bold">{{ agent.rating }}/5.00</span>
+                    </div>
+                    
+                    {% if agent.bio %}
+                        <p class="text-muted mb-3">{{ agent.bio }}</p>
+                    {% endif %}
+                    
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p class="text-muted small">
+                                <i class="fas fa-phone me-2 text-primary"></i>
+                                <strong>{{ agent.phone }}</strong>
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="text-muted small">
+                                <i class="fas fa-envelope me-2 text-primary"></i>
+                                <strong>{{ agent.user.email }}</strong>
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="text-muted small">
+                                <i class="fas fa-home me-2 text-primary"></i>
+                                <strong>{{ properties.paginator.count }} Properties</strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Properties Section -->
+    <div class="mb-5">
+        <h3 class="fw-bold mb-4"><i class="fas fa-list me-2"></i>Properties by {{ agent.user.first_name|default:agent.user.username }}</h3>
+        
+        {% if properties %}
+            <div class="row g-4">
+                {% for property in properties %}
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card property-card h-100 shadow-sm">
+                            <!-- Image -->
+                            <div class="position-relative overflow-hidden" style="height: 250px;">
+                                {% if property.featured_image %}
+                                    <img src="{{ property.featured_image.url }}" class="card-img-top img-cover" alt="{{ property.title }}">
+                                {% else %}
+                                    <div class="bg-secondary d-flex align-items-center justify-content-center" style="height: 100%;">
+                                        <i class="fas fa-image text-white" style="font-size: 50px;"></i>
+                                    </div>
+                                {% endif %}
+                                
+                                <!-- Status Badge -->
+                                <span class="badge position-absolute top-0 end-0 m-2" style="background-color: {% if property.status == 'sale' %}#28a745{% elif property.status == 'rent' %}#007bff{% else %}#6c757d{% endif %};">
+                                    {{ property.get_status_display }}
+                                </span>
+                            </div>
+                            
+                            <div class="card-body">
+                                <h5 class="card-title">{{ property.title }}</h5>
+                                <p class="text-muted small mb-3">
+                                    <i class="fas fa-map-marker-alt me-1"></i>{{ property.location }}
+                                </p>
+                                
+                                <!-- Property Details -->
+                                <div class="d-flex justify-content-between mb-3 text-muted small">
+                                    <div>
+                                        <i class="fas fa-bed me-1 text-primary"></i>
+                                        <span>{{ property.bedrooms }} Bed</span>
+                                    </div>
+                                    <div>
+                                        <i class="fas fa-bath me-1 text-primary"></i>
+                                        <span>{{ property.bathrooms }} Bath</span>
+                                    </div>
+                                    <div>
+                                        <i class="fas fa-ruler me-1 text-primary"></i>
+                                        <span>{{ property.area }} sqft</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card-footer bg-white border-top">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="fw-bold text-primary mb-0">${{ property.price|floatformat:0 }}</h6>
+                                    <a href="{% url 'property_detail' property.pk %}" class="btn btn-sm btn-primary">
+                                        View Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Pagination -->
+            {% if properties.has_other_pages %}
+                <nav aria-label="Page navigation" class="mt-5">
+                    <ul class="pagination justify-content-center">
+                        {% if properties.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1">First</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ properties.previous_page_number }}">Previous</a>
+                            </li>
+                        {% endif %}
+                        
+                        {% for num in properties.paginator.page_range %}
+                            <li class="page-item {% if properties.number == num %}active{% endif %}">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% endfor %}
+                        
+                        {% if properties.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ properties.next_page_number }}">Next</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ properties.paginator.num_pages }}">Last</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        {% else %}
+            <div class="alert alert-info text-center">
+                <i class="fas fa-info-circle me-2"></i>
+                {{ agent.user.first_name|default:agent.user.username }} hasn't listed any properties yet.
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

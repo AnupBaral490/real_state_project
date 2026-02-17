@@ -1,0 +1,203 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Home - RealEstate Pro{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section bg-gradient text-white py-5">
+    <div class="container-fluid px-3 px-md-0">
+        <div class="row align-items-center py-3 py-md-5">
+            <div class="col-12 col-md-6 mb-4 mb-md-0">
+                <h1 class="display-4 fw-bold mb-3" style="font-size: clamp(1.75rem, 5vw, 3.5rem);">Find Your Dream Property</h1>
+                <p class="lead mb-4" style="font-size: clamp(1rem, 3vw, 1.25rem);">Discover amazing properties from trusted agents. Start your real estate journey with us today.</p>
+                
+                <div class="input-group input-group-lg mb-3 mb-md-4">
+                    <input type="text" class="form-control form-control-lg" placeholder="Search by location..." id="searchInput">
+                    <a href="{% url 'property_list' %}" class="btn btn-light">
+                        <i class="fas fa-search"></i>
+                    </a>
+                </div>
+                
+                <div class="d-flex flex-column flex-sm-row gap-2">
+                    <a href="{% url 'property_list' %}" class="btn btn-light btn-lg w-100 w-sm-auto">
+                        <i class="fas fa-search me-2"></i>Browse Properties
+                    </a>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 text-center d-none d-md-block">
+                <i class="fas fa-home" style="font-size: clamp(80px, 20vw, 150px); opacity: 0.2;"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section bg-light py-5">
+    <div class="container-fluid px-3 px-md-0">
+        <div class="row g-3 g-md-4">
+            <div class="col-12 col-sm-6 col-lg-4">
+                <div class="stat-card h-100 p-4 p-md-5">
+                    <h3 class="display-5 fw-bold text-primary" style="font-size: clamp(1.75rem, 4vw, 2.5rem);">{{ total_properties }}</h3>
+                    <p class="text-muted fw-600">Total Properties</p>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-4">
+                <div class="stat-card h-100 p-4 p-md-5">
+                    <h3 class="display-5 fw-bold text-primary" style="font-size: clamp(1.75rem, 4vw, 2.5rem);">{{ total_agents }}</h3>
+                    <p class="text-muted fw-600">Professional Agents</p>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-4">
+                <div class="stat-card h-100 p-4 p-md-5">
+                    <h3 class="display-5 fw-bold text-primary" style="font-size: clamp(1.75rem, 4vw, 2.5rem);">24/7</h3>
+                    <p class="text-muted fw-600">Customer Support</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Properties -->
+<section class="featured-section py-5">
+    <div class="container-fluid px-3 px-md-0">
+        <div class="text-center mb-4 mb-md-5">
+            <h2 class="display-5 fw-bold mb-3" style="font-size: clamp(1.75rem, 5vw, 2.5rem);">Featured Properties</h2>
+            <p class="lead text-muted" style="font-size: clamp(0.95rem, 2vw, 1.1rem);">Checkout our latest and best properties available for sale</p>
+        </div>
+        
+        {% if featured_properties %}
+            <div class="row g-3 g-md-4">
+                {% for property in featured_properties %}
+                    <div class="col-12 col-sm-6 col-lg-4">
+                        <div class="property-card card h-100 shadow-sm hover-shadow">
+                            <!-- Image -->
+                            <div class="position-relative overflow-hidden" style="height: 200px; min-height: 180px;">
+                                {% if property.featured_image %}
+                                    <img src="{{ property.featured_image.url }}" class="card-img-top img-cover w-100 h-100" alt="{{ property.title }}" style="object-fit: cover;">
+                                {% else %}
+                                    <div class="bg-secondary d-flex align-items-center justify-content-center w-100 h-100">
+                                        <i class="fas fa-image text-white" style="font-size: clamp(30px, 10vw, 50px);"></i>
+                                    </div>
+                                {% endif %}
+                                
+                                <!-- Status Badge -->
+                                <span class="badge position-absolute top-0 end-0 m-2" style="background-color: {% if property.status == 'sale' %}#10b981{% elif property.status == 'rent' %}#06b6d4{% else %}#6b7280{% endif %}; font-size: 0.75rem;">
+                                    {{ property.get_status_display|upper }}
+                                </span>
+                            </div>
+                            
+                            <div class="card-body p-3">
+                                <h5 class="card-title text-truncate" style="font-size: 1rem;">{{ property.title }}</h5>
+                                <p class="text-muted small mb-2 mb-md-3">
+                                    <i class="fas fa-map-marker-alt me-1"></i>
+                                    <span class="text-truncate d-inline-block" style="max-width: 200px;">{{ property.location }}</span>
+                                </p>
+                                
+                                <!-- Property Details -->
+                                <div class="d-flex justify-content-between mb-3 text-muted" style="font-size: 0.85rem;">
+                                    <div class="text-center flex-grow-1">
+                                        <i class="fas fa-bed me-1"></i>
+                                        <span class="d-none d-sm-inline">{{ property.bedrooms }} Bed</span>
+                                        <span class="d-sm-none">{{ property.bedrooms }}B</span>
+                                    </div>
+                                    <div class="text-center flex-grow-1">
+                                        <i class="fas fa-bath me-1"></i>
+                                        <span class="d-none d-sm-inline">{{ property.bathrooms }} Bath</span>
+                                        <span class="d-sm-none">{{ property.bathrooms }}B</span>
+                                    </div>
+                                    <div class="text-center flex-grow-1">
+                                        <i class="fas fa-ruler me-1"></i>
+                                        <span class="d-none d-sm-inline">{{ property.area }} sqft</span>
+                                        <span class="d-sm-none">{{ property.area }}</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Price & Button -->
+                                <div class="d-flex justify-content-between align-items-center gap-2">
+                                    <h6 class="fw-bold text-primary mb-0" style="font-size: 1.1rem;">${{ property.price|floatformat:0 }}</h6>
+                                    <a href="{% url 'property_detail' property.pk %}" class="btn btn-sm btn-primary text-nowrap">
+                                        View<span class="d-none d-sm-inline"> Details</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <div class="text-center mt-5">
+                <a href="{% url 'property_list' %}" class="btn btn-primary btn-lg w-100 w-sm-auto" style="max-width: 300px;">
+                    View All Properties
+                </a>
+            </div>
+        {% else %}
+            <div class="alert alert-info text-center">
+                <i class="fas fa-info-circle me-2"></i>No properties available at the moment.
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section bg-primary text-white py-5">
+    <div class="container-fluid px-3 px-md-0">
+        <div class="text-center">
+            <h2 class="display-5 fw-bold mb-3 mb-md-4" style="font-size: clamp(1.75rem, 5vw, 2.5rem);">Ready to Find Your Perfect Home?</h2>
+            <p class="lead mb-4 mb-md-5" style="font-size: clamp(0.95rem, 2vw, 1.1rem);">Join thousands of happy customers who found their dream property with us.</p>
+            
+            <div class="d-flex flex-column flex-sm-row gap-2 justify-content-center">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'property_list' %}" class="btn btn-light btn-lg">
+                        <i class="fas fa-search me-2"></i>Start Searching
+                    </a>
+                {% else %}
+                    <a href="{% url 'register' %}" class="btn btn-light btn-lg">
+                        <i class="fas fa-user-plus me-2"></i>Register Now
+                    </a>
+                    <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 500px;
+    }
+    
+    .stat-card {
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .property-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: none;
+    }
+    
+    .property-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
+    }
+    
+    .img-cover {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .hover-shadow {
+        transition: all 0.3s ease;
+    }
+</style>
+{% endblock %}

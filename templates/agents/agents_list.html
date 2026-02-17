@@ -1,0 +1,111 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Agents - RealEstate Pro{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="display-4 fw-bold mb-3">Our Top Agents</h2>
+        <p class="lead text-muted">Meet our professional real estate agents</p>
+    </div>
+    
+    {% if agents %}
+        <div class="row g-4">
+            {% for agent in agents %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow-sm hover-shadow h-100">
+                        <!-- Agent Image -->
+                        <div class="position-relative overflow-hidden" style="height: 300px;">
+                            {% if agent.profile_image %}
+                                <img src="{{ agent.profile_image.url }}" class="card-img-top w-100 h-100" style="object-fit: cover;" alt="{{ agent.user.get_full_name }}">
+                            {% else %}
+                                <div class="bg-primary d-flex align-items-center justify-content-center w-100 h-100">
+                                    <i class="fas fa-user text-white" style="font-size: 80px;"></i>
+                                </div>
+                            {% endif %}
+                            
+                            <!-- Rating Badge -->
+                            <span class="badge bg-warning position-absolute top-0 end-0 m-3">
+                                <i class="fas fa-star me-1"></i>{{ agent.rating }}
+                            </span>
+                        </div>
+                        
+                        <div class="card-body text-center">
+                            <h5 class="card-title fw-bold">
+                                {{ agent.user.get_full_name|default:agent.user.username }}
+                            </h5>
+                            
+                            {% if agent.bio %}
+                                <p class="text-muted small mb-3">{{ agent.bio|truncatewords:15 }}</p>
+                            {% endif %}
+                            
+                            <div class="mb-3">
+                                <div class="text-muted small mb-2">
+                                    <i class="fas fa-phone me-2 text-primary"></i>
+                                    {{ agent.phone }}
+                                </div>
+                                <div class="text-muted small">
+                                    <i class="fas fa-envelope me-2 text-primary"></i>
+                                    {{ agent.user.email }}
+                                </div>
+                            </div>
+                            
+                            <!-- Properties Count -->
+                            <div class="bg-light p-2 rounded mb-3">
+                                <p class="mb-0">
+                                    <i class="fas fa-home me-2 text-primary"></i>
+                                    <span class="fw-bold">{{ agent.properties.count }}</span>
+                                    Properties
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="card-footer bg-white border-top">
+                            <a href="{% url 'agent_detail' agent.pk %}" class="btn btn-primary w-100">
+                                <i class="fas fa-arrow-right me-2"></i>View Properties
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if agents.has_other_pages %}
+            <nav aria-label="Page navigation" class="mt-5">
+                <ul class="pagination justify-content-center">
+                    {% if agents.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">First</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ agents.previous_page_number }}">Previous</a>
+                        </li>
+                    {% endif %}
+                    
+                    {% for num in agents.paginator.page_range %}
+                        <li class="page-item {% if agents.number == num %}active{% endif %}">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                    {% endfor %}
+                    
+                    {% if agents.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ agents.next_page_number }}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ agents.paginator.num_pages }}">Last</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    {% else %}
+        <div class="alert alert-info text-center py-5">
+            <i class="fas fa-info-circle me-2"></i>No agents available at the moment.
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

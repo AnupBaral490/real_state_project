@@ -1,0 +1,116 @@
+<style>
+.footer-custom {
+    background-color: #1c1c1e; /* dark background */
+    color: #e0e0e0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 3rem 0;
+}
+
+.footer-custom h5, 
+.footer-custom h6 {
+    color: #ffffff;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.footer-custom p {
+    color: #b0b0b0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.footer-custom a {
+    color: #e0e0e0;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-custom a:hover {
+    color: #f0a500; /* gold accent on hover */
+}
+
+.footer-custom .social-links a {
+    font-size: 1.2rem;
+    transition: color 0.3s, transform 0.2s;
+}
+
+.footer-custom .social-links a:hover {
+    color: #f0a500;
+    transform: scale(1.1);
+}
+
+.footer-custom hr {
+    border-top: 1px solid #3a3a3c;
+    margin: 2rem 0;
+}
+
+.footer-custom .small {
+    font-size: 0.8rem;
+    color: #888888;
+}
+</style>
+
+<footer class="footer-custom">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <h5>
+                    <i class="fas fa-building me-2" style="color:#f0a500;"></i>RealEstate Pro
+                </h5>
+                <p>
+                    Your trusted partner in finding the perfect property. Connect with top agents and discover amazing real estate opportunities.
+                </p>
+            </div>
+            
+            <div class="col-md-2 mb-4">
+                <h6>Quick Links</h6>
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'property_list' %}">Properties</a></li>
+                    <li><a href="{% url 'agents_list' %}">Agents</a></li>
+                </ul>
+            </div>
+            
+            <div class="col-md-2 mb-4">
+                <h6>Account</h6>
+                <ul class="list-unstyled">
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'profile' %}">Profile</a></li>
+                        <li><a href="{% url 'logout' %}">Logout</a></li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}">Login</a></li>
+                        <li><a href="{% url 'register' %}">Register</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <h6>Contact Us</h6>
+                <div class="mb-2">
+                    <i class="fas fa-phone me-2"></i>+1 (555) 123-4567
+                </div>
+                <div class="mb-3">
+                    <i class="fas fa-envelope me-2"></i>info@realestatepro.com
+                </div>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <hr>
+        
+        <div class="row">
+            <div class="col-md-6 small">
+                &copy; 2024 RealEstate Pro. All rights reserved.
+            </div>
+            <div class="col-md-6 text-end small">
+                <a href="#">Privacy Policy</a> | 
+                <a href="#">Terms of Service</a>
+            </div>
+        </div>
+    </div>
+</footer>

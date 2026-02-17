@@ -1,0 +1,84 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}My Bookings - RealEstate Pro{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-calendar-alt me-2"></i>My Bookings</h2>
+                <a href="{% url 'property_list' %}" class="btn btn-primary">
+                    <i class="fas fa-search me-2"></i>Search Properties
+                </a>
+            </div>
+            
+            {% if bookings %}
+                <div class="row g-4">
+                    {% for booking in bookings %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card shadow-sm h-100">
+                                <!-- Property Image -->
+                                <div style="height: 200px; overflow: hidden;">
+                                    {% if booking.property.featured_image %}
+                                        <img src="{{ booking.property.featured_image.url }}" class="card-img-top w-100 h-100" style="object-fit: cover;" alt="{{ booking.property.title }}">
+                                    {% else %}
+                                        <div class="bg-secondary d-flex align-items-center justify-content-center w-100 h-100">
+                                            <i class="fas fa-image text-white" style="font-size: 40px;"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ booking.property.title }}</h5>
+                                    
+                                    <p class="text-muted small mb-2">
+                                        <i class="fas fa-map-marker-alt me-1"></i>{{ booking.property.location }}
+                                    </p>
+                                    
+                                    <div class="mb-3">
+                                        <p class="mb-1"><strong>Visit Date:</strong></p>
+                                        <p class="text-muted">
+                                            <i class="fas fa-calendar me-1"></i>
+                                            {{ booking.requested_date|date:"M d, Y - h:i A" }}
+                                        </p>
+                                    </div>
+                                    
+                                    <!-- Status Badge -->
+                                    <div class="mb-3">
+                                        <p class="mb-1"><strong>Status:</strong></p>
+                                        <span class="badge" style="background-color: {% if booking.status == 'approved' %}#28a745{% elif booking.status == 'rejected' %}#dc3545{% elif booking.status == 'completed' %}#17a2b8{% else %}#ffc107{% endif %};">
+                                            {{ booking.get_status_display }}
+                                        </span>
+                                    </div>
+                                    
+                                    <!-- Price -->
+                                    <p class="text-primary fw-bold mb-3">
+                                        ${{ booking.property.price|floatformat:0 }}
+                                    </p>
+                                </div>
+                                
+                                <div class="card-footer bg-white border-top">
+                                    <a href="{% url 'booking_detail' booking.pk %}" class="btn btn-sm btn-outline-primary w-100">
+                                        View Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info text-center py-5">
+                    <i class="fas fa-calendar-alt" style="font-size: 50px; margin-bottom: 20px;"></i>
+                    <p>You haven't booked any properties yet.</p>
+                    <a href="{% url 'property_list' %}" class="btn btn-primary mt-3">
+                        <i class="fas fa-search me-2"></i>Find Properties
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

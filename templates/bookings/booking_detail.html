@@ -1,0 +1,143 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Booking Details - RealEstate Pro{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h2 class="mb-4"><i class="fas fa-calendar-alt me-2"></i>Booking Details</h2>
+            
+            <div class="row g-4">
+                <!-- Booking Info -->
+                <div class="col-md-7">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Booking Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <p class="text-muted small">Booking ID</p>
+                                    <p class="fw-bold">#{{ booking.id }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="text-muted small">Status</p>
+                                    <p>
+                                        <span class="badge" style="background-color: {% if booking.status == 'approved' %}#28a745{% elif booking.status == 'rejected' %}#dc3545{% elif booking.status == 'completed' %}#17a2b8{% else %}#ffc107{% endif %};">
+                                            {{ booking.get_status_display }}
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <p class="text-muted small">Requested Date</p>
+                                    <p class="fw-bold">{{ booking.requested_date|date:"M d, Y" }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="text-muted small">Requested Time</p>
+                                    <p class="fw-bold">{{ booking.requested_date|time:"h:i A" }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="text-muted small">Booked On</p>
+                                    <p class="fw-bold">{{ booking.created_at|date:"M d, Y" }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="text-muted small">Last Updated</p>
+                                    <p class="fw-bold">{{ booking.updated_at|date:"M d, Y h:i A" }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Message -->
+                    {% if booking.message %}
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-header bg-light">
+                                <h5 class="mb-0">Your Message</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted">{{ booking.message }}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                    
+                    <!-- Actions -->
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">Actions</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if booking.status == 'pending' %}
+                                <form method="post" action="{% url 'update_booking_status' booking.id %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="status" value="cancelled">
+                                    <button type="submit" class="btn btn-danger w-100" onclick="return confirm('Are you sure you want to cancel this booking?');">
+                                        <i class="fas fa-times me-2"></i>Cancel Booking
+                                    </button>
+                                </form>
+                            {% else %}
+                                <p class="text-muted text-center mb-0">No actions available for this booking status.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Property Info -->
+                <div class="col-md-5">
+                    <div class="card shadow-sm sticky-top" style="top: 20px;">
+                        <div class="position-relative overflow-hidden" style="height: 300px;">
+                            {% if booking.property.featured_image %}
+                                <img src="{{ booking.property.featured_image.url }}" class="w-100 h-100" style="object-fit: cover;" alt="{{ booking.property.title }}">
+                            {% else %}
+                                <div class="bg-secondary d-flex align-items-center justify-content-center w-100 h-100">
+                                    <i class="fas fa-image text-white" style="font-size: 80px;"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="card-body">
+                            <h5 class="fw-bold mb-2">{{ booking.property.title }}</h5>
+                            
+                            <p class="text-muted small mb-3">
+                                <i class="fas fa-map-marker-alt me-1"></i>{{ booking.property.location }}
+                            </p>
+                            
+                            <div class="mb-3">
+                                <p class="text-muted small">Price</p>
+                                <h6 class="text-primary fw-bold">${{ booking.property.price|floatformat:0 }}</h6>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-4 text-center">
+                                    <p class="text-muted small">Beds</p>
+                                    <h6>{{ booking.property.bedrooms }}</h6>
+                                </div>
+                                <div class="col-4 text-center border-start border-end">
+                                    <p class="text-muted small">Baths</p>
+                                    <h6>{{ booking.property.bathrooms }}</h6>
+                                </div>
+                                <div class="col-4 text-center">
+                                    <p class="text-muted small">Sqft</p>
+                                    <h6>{{ booking.property.area }}</h6>
+                                </div>
+                            </div>
+                            
+                            <a href="{% url 'property_detail' booking.property.pk %}" class="btn btn-primary w-100 btn-sm">
+                                <i class="fas fa-arrow-right me-2"></i>View Property
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

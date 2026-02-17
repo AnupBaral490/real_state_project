@@ -1,0 +1,93 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Inquiries - RealEstate Pro{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-envelope me-2"></i>Inquiries</h2>
+        <span class="badge bg-primary">{{ inquiries.count }} Total Inquiries</span>
+    </div>
+    
+    {% if inquiries %}
+        <div class="row g-4">
+            {% for inquiry in inquiries %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow-sm h-100 {% if not inquiry.is_read %}border-warning{% endif %}">
+                        {% if not inquiry.is_read %}
+                            <div class="card-header bg-warning text-dark">
+                                <span class="badge bg-danger">New</span> Unread Inquiry
+                            </div>
+                        {% else %}
+                            <div class="card-header bg-light">
+                                Read Inquiry
+                            </div>
+                        {% endif %}
+                        
+                        <div class="card-body">
+                            <!-- Property -->
+                            <h6 class="card-title">
+                                <i class="fas fa-home me-2 text-primary"></i>
+                                {{ inquiry.property.title|truncatewords:5 }}
+                            </h6>
+                            
+                            <!-- From -->
+                            <div class="mb-3">
+                                <p class="small text-muted mb-1">From:</p>
+                                <p class="mb-0"><strong>{{ inquiry.user.get_full_name|default:inquiry.user.username }}</strong></p>
+                            </div>
+                            
+                            <!-- Contact -->
+                            <div class="mb-3">
+                                <p class="small text-muted mb-1">Contact Information:</p>
+                                <p class="mb-1">
+                                    <i class="fas fa-envelope me-2"></i>
+                                    <a href="mailto:{{ inquiry.email }}">{{ inquiry.email }}</a>
+                                </p>
+                                <p class="mb-0">
+                                    <i class="fas fa-phone me-2"></i>
+                                    <a href="tel:{{ inquiry.phone }}">{{ inquiry.phone }}</a>
+                                </p>
+                            </div>
+                            
+                            <!-- Message Preview -->
+                            <div class="mb-3">
+                                <p class="small text-muted mb-1">Message:</p>
+                                <p class="text-muted small">{{ inquiry.message|truncatewords:15 }}</p>
+                            </div>
+                            
+                            <!-- Date -->
+                            <p class="text-muted small mb-0">
+                                <i class="fas fa-clock me-1"></i>{{ inquiry.created_at|date:"M d, Y h:i A" }}
+                            </p>
+                        </div>
+                        
+                        <div class="card-footer bg-white border-top">
+                            <div class="d-flex gap-2">
+                                {% if not inquiry.is_read %}
+                                    <a href="{% url 'mark_inquiry_as_read' inquiry.pk %}" class="btn btn-sm btn-outline-success flex-grow-1">
+                                        <i class="fas fa-check me-1"></i>Mark Read
+                                    </a>
+                                {% endif %}
+                                <a href="mailto:{{ inquiry.email }}" class="btn btn-sm btn-outline-primary flex-grow-1">
+                                    <i class="fas fa-reply me-1"></i>Reply
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center py-5">
+            <i class="fas fa-envelope" style="font-size: 50px; margin-bottom: 20px;"></i>
+            <p>No inquiries for your properties yet.</p>
+            <a href="{% url 'home' %}" class="btn btn-primary mt-3">
+                <i class="fas fa-home me-2"></i>Back to Home
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}
