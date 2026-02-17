@@ -65,3 +65,18 @@ class CustomAuthenticationForm(AuthenticationForm):
             'placeholder': 'Password'
         })
     )
+
+
+class ProfilePhotoForm(forms.ModelForm):
+    profile_photo = forms.ImageField(
+        required=False,
+        widget=forms.FileInput(attrs={
+            'class': 'form-control',
+            'accept': 'image/*',
+            'id': 'profilePhotoInput'
+        })
+    )
+
+    class Meta:
+        model = User
+        fields = ['profile_photo']

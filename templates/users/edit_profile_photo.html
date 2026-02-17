@@ -1,0 +1,119 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Edit Profile Photo - RealEstate Pro{% endblock %}
+
+
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card shadow-lg">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0" style="color: #f5e8e8; font-weight: 700;"><i class="fas fa-camera me-2"></i>Upload Profile Photo</h4>
+                </div>
+                
+                <div class="card-body">
+                    <!-- Current Photo Preview -->
+                    <div class="text-center mb-4">
+                        {% if user.profile_photo %}
+                            <img src="{{ user.profile_photo.url }}" alt="{{ user.get_full_name }}" class="rounded-circle img-fluid" style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #667eea;">
+                            <p class="text-muted mt-2 small">Current Photo</p>
+                        {% else %}
+                            <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center" style="width: 150px; height: 150px;">
+                                <i class="fas fa-user text-muted" style="font-size: 80px;"></i>
+                            </div>
+                            <p class="text-muted mt-2 small">No photo yet</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Upload Form -->
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <!-- Form Errors -->
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                {% for error in form.non_field_errors %}
+                                    <div>{{ error }}</div>
+                                {% endfor %}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endif %}
+
+                        <!-- Photo Field -->
+                        <div class="mb-4">
+                            <label for="profilePhotoInput" class="form-label fw-bold">
+                                <i class="fas fa-image me-2"></i>Select Photo
+                            </label>
+                            {{ form.profile_photo }}
+                            <small class="form-text text-muted d-block mt-2">
+                                Accepted formats: JPG, PNG, GIF (Max size: 5MB)<br>
+                                Recommended: Square image (1:1 ratio)
+                            </small>
+                            {% if form.profile_photo.errors %}
+                                <div class="alert alert-danger mt-2">
+                                    {% for error in form.profile_photo.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Preview -->
+                        <div id="imagePreview" class="mb-4" style="display: none;">
+                            <p class="text-muted small mb-2">Preview:</p>
+                            <img id="previewImg" src="" alt="Preview" class="rounded img-fluid" style="max-height: 200px;">
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'profile' %}" class="btn btn-secondary">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-dark">
+                                <i class="fas fa-upload me-2"></i>Upload Photo
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Tips Card -->
+            <div class="card shadow-sm mt-4">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0"><i class="fas fa-lightbulb me-2"></i>Tips for Best Results</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><strong>Good lighting:</strong> Natural light works best</li>
+                        <li class="mb-2"><strong>Framing:</strong> Show your face clearly</li>
+                        <li class="mb-2"><strong>Smile:</strong> A friendly photo builds trust</li>
+                        <li class="mb-2"><strong>Professional:</strong> Keep it professional</li>
+                        <li><strong>Resolution:</strong> Use a high-quality image</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Image Preview Script -->
+<script>
+document.getElementById('profilePhotoInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const preview = document.getElementById('imagePreview');
+            const previewImg = document.getElementById('previewImg');
+            previewImg.src = event.target.result;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+});
+</script>
+
+{% endblock %}

@@ -3,66 +3,158 @@
 
 {% block title %}My Profile - RealEstate Pro{% endblock %}
 
+
+
+
 {% block content %}
 <div class="container py-5">
     <div class="row">
+        <!-- Sidebar -->
         <div class="col-lg-4 mb-4">
             <!-- Profile Card -->
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <div class="mb-3">
-                        <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
-                            <i class="fas fa-user text-white" style="font-size: 50px;"></i>
-                        </div>
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <div class="profile-img-container mb-3">
+                        {% if user.profile_photo %}
+                            <img src="{{ user.profile_photo.url }}" alt="{{ user.get_full_name }}" class="rounded-circle img-fluid">
+                        {% else %}
+                            <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center" style="width:100px; height:100px;">
+                                <i class="fas fa-user text-white" style="font-size:50px;"></i>
+                            </div>
+                        {% endif %}
                     </div>
                     
-                    <h5 class="fw-bold">{{ user.get_full_name|default:user.username }}</h5>
-                    <p class="text-muted small mb-3">
-                        <span class="badge bg-primary">{% for choice_val, choice_label in user.ROLE_CHOICES %}{% if choice_val == user.role %}{{ choice_label }}{% endif %}{% endfor %}</span>
-                    </p>
+                    <a href="{% url 'edit_profile_photo' %}" class="btn btn-sm btn-dark mb-3" title="Upload Profile Photo">
+                        <i class="fas fa-camera me-2"></i>Upload Photo
+                    </a>
                     
-                    <div class="list-group">
+                    <h5 style="margin: 0; font-weight: 700; font-size: 18px; color: #1f2937; letter-spacing: 0.3px;">{{ user.get_full_name|default:user.username }}</h5>
+
+                    <p style="
+                        margin-top: 6px;
+                        margin-bottom: 0;">
+                        <span style="
+                            display: inline-block;
+                            padding: 4px 10px;
+                            font-size: 12px;
+                            font-weight: 600;
+                            color: #ffffff;
+                            background: linear-gradient(135deg, #3b82f6, #2563eb);
+                            border-radius: 999px;
+                            letter-spacing: 0.4px;
+                            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.35);
+                        ">
+                            {% for val,label in user.ROLE_CHOICES %}
+                                {% if val == user.role %}{{ label }}{% endif %}
+                            {% endfor %}
+                        </span>
+                     </p>
+
+                    
+                    <div style="
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #ffffff;
+">
+
+    <div style="
+        padding: 12px 14px;
+        border-bottom: 1px solid #e5e7eb;
+    ">
+        <small style="
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: #6b7280;
+            margin-bottom: 2px;
+        ">
+            Email
+        </small>
+        <p style="
+            margin: 0;
+            font-size: 14px;
+            font-weight: 500;
+            color: #111827;
+            word-break: break-word;
+        ">
+            {{ user.email }}
+        </p>
+    </div>
+
+    <div style="
+        padding: 12px 14px;
+        border-bottom: 1px solid #e5e7eb;
+    ">
+        <small style="
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: #6b7280;
+            margin-bottom: 2px;
+        ">
+            Username
+        </small>
+        <p style="
+            margin: 0;
+            font-size: 14px;
+            font-weight: 500;
+            color: #111827;
+        ">
+            {{ user.username }}
+        </p>
+    </div>
+
+    <div style="
+        padding: 12px 14px;
+    ">
+        <small style="
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: #6b7280;
+            margin-bottom: 2px;
+        ">
+            Joined
+        </small>
+        <p style="
+            margin: 0;
+            font-size: 14px;
+            font-weight: 500;
+            color: #111827;
+        ">
+            {{ user.date_joined|date:"M d, Y" }}
+        </p>
+    </div>
+
+</div>
+
+                </div>
+            </div>
+            
+            <!-- Agent Info Card -->
+            {% if is_agent and agent %}
+            <div class="card shadow-sm mt-3">
+                <div class="card-header bg-dark text-white">
+                    <h6 class="mb-0"><i class="fas fa-briefcase me-2"></i>Agent Details</h6>
+                </div>
+                <div class="card-body">
+                    <div class="list-group text-start">
                         <div class="list-group-item">
-                            <small class="text-muted">Email</small>
-                            <p class="mb-0">{{ user.email }}</p>
+                            <small class="text-muted">Phone</small>
+                            <p class="mb-0">{{ agent.phone }}</p>
                         </div>
                         <div class="list-group-item">
-                            <small class="text-muted">Username</small>
-                            <p class="mb-0">{{ user.username }}</p>
+                            <small class="text-muted">Rating</small>
+                            <p class="mb-0"><i class="fas fa-star text-warning me-1"></i>{{ agent.rating }}/5.00</p>
                         </div>
                         <div class="list-group-item">
-                            <small class="text-muted">Joined</small>
-                            <p class="mb-0">{{ user.date_joined|date:"M d, Y" }}</p>
+                            <small class="text-muted">Properties</small>
+                            <p class="mb-0">{{ properties.count }} active</p>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <!-- Agent Info Card (if applicable) -->
-            {% if is_agent and agent %}
-                <div class="card shadow-sm mt-3">
-                    <div class="card-header bg-primary text-white">
-                        <h6 class="mb-0"><i class="fas fa-briefcase me-2"></i>Agent Details</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="list-group">
-                            <div class="list-group-item">
-                                <small class="text-muted">Phone</small>
-                                <p class="mb-0">{{ agent.phone }}</p>
-                            </div>
-                            <div class="list-group-item">
-                                <small class="text-muted">Rating</small>
-                                <p class="mb-0">
-                                    <i class="fas fa-star text-warning me-1"></i>{{ agent.rating }}/5.00
-                                </p>
-                            </div>
-                            <div class="list-group-item">
-                                <small class="text-muted">Properties</small>
-                                <p class="mb-0">{{ properties.count }} active</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             {% endif %}
         </div>
         
@@ -71,7 +163,7 @@
             {% if is_agent and agent %}
                 <!-- Agent Dashboard -->
                 <div class="card shadow-sm mb-4">
-                    <div class="card-header bg-primary text-white">
+                    <div class="card-header bg-dark text-white">
                         <h5 class="mb-0"><i class="fas fa-home me-2"></i>My Properties</h5>
                     </div>
                     <div class="card-body">
@@ -88,20 +180,18 @@
                                     </thead>
                                     <tbody>
                                         {% for property in properties|slice:":5" %}
-                                            <tr>
-                                                <td>{{ property.title|truncatewords:5 }}</td>
-                                                <td>${{ property.price|floatformat:0 }}</td>
-                                                <td>
-                                                    <span class="badge" style="background-color: {% if property.status == 'sale' %}#28a745{% elif property.status == 'rent' %}#007bff{% else %}#6c757d{% endif %};">
-                                                        {{ property.get_status_display }}
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <a href="{% url 'property_detail' property.pk %}" class="btn btn-sm btn-outline-primary">
-                                                        View
-                                                    </a>
-                                                </td>
-                                            </tr>
+                                        <tr>
+                                            <td>{{ property.title|truncatewords:5 }}</td>
+                                            <td>${{ property.price|floatformat:0 }}</td>
+                                            <td>
+                                                <span class="badge" style="background-color: {% if property.status == 'sale' %}#28a745{% elif property.status == 'rent' %}#007bff{% else %}#6c757d{% endif %};">
+                                                    {{ property.get_status_display }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <a href="{% url 'property_detail' property.pk %}" class="btn btn-sm btn-outline-primary">View</a>
+                                            </td>
+                                        </tr>
                                         {% endfor %}
                                     </tbody>
                                 </table>
@@ -110,9 +200,7 @@
                                 <i class="fas fa-plus me-2"></i>Manage All Properties
                             </a>
                         {% else %}
-                            <p class="text-muted text-center py-3">
-                                You haven't added any properties yet.
-                            </p>
+                            <p class="text-muted text-center py-3">You haven't added any properties yet.</p>
                             <a href="{% url 'admin:properties_property_add' %}" class="btn btn-primary w-100">
                                 <i class="fas fa-plus me-2"></i>Add First Property
                             </a>
@@ -121,7 +209,7 @@
                 </div>
                 
                 <!-- Recent Bookings -->
-                <div class="card shadow-sm">
+                <div class="card shadow-sm mb-4">
                     <div class="card-header bg-success text-white">
                         <h5 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>Recent Bookings</h5>
                     </div>
@@ -133,13 +221,13 @@
                 </div>
             {% else %}
                 <!-- Buyer Dashboard -->
-                <div class="card shadow-sm">
-                    <div class="card-header bg-primary text-white">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-dark text-white">
                         <h5 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>My Bookings</h5>
                     </div>
                     <div class="card-body">
                         <p class="text-muted mb-3">View and manage your property visit bookings.</p>
-                        <a href="{% url 'my_bookings' %}" class="btn btn-primary w-100">
+                        <a href="{% url 'my_bookings' %}" class="btn btn-dark w-100">
                             <i class="fas fa-calendar me-2"></i>View My Bookings
                         </a>
                     </div>
@@ -154,32 +242,24 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <a href="{% url 'property_list' %}" class="btn btn-outline-primary w-100">
-                                <i class="fas fa-search me-2"></i>Browse Properties
-                            </a>
+                            <a href="{% url 'property_list' %}" class="btn btn-outline-primary w-100"><i class="fas fa-search me-2"></i>Browse Properties</a>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <a href="{% url 'agents_list' %}" class="btn btn-outline-primary w-100">
-                                <i class="fas fa-users me-2"></i>Our Agents
-                            </a>
+                            <a href="{% url 'agents_list' %}" class="btn btn-outline-primary w-100"><i class="fas fa-users me-2"></i>Our Agents</a>
                         </div>
                         {% if user.is_staff %}
-                            <div class="col-md-6 mb-3">
-                                <a href="{% url 'admin:index' %}" class="btn btn-outline-warning w-100">
-                                    <i class="fas fa-cog me-2"></i>Admin Panel
-                                </a>
-                            </div>
+                        <div class="col-md-6 mb-3">
+                            <a href="{% url 'admin:index' %}" class="btn btn-outline-warning w-100"><i class="fas fa-cog me-2"></i>Admin Panel</a>
+                        </div>
                         {% endif %}
                         <div class="col-md-6 mb-3">
-                            <a href="{% url 'logout' %}" class="btn btn-outline-danger w-100">
-                                <i class="fas fa-sign-out-alt me-2"></i>Logout
-                            </a>
+                            <a href="{% url 'logout' %}" class="btn btn-outline-danger w-100"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
                         </div>
                     </div>
                 </div>
             </div>
+            
         </div>
     </div>
 </div>
-
 {% endblock %}

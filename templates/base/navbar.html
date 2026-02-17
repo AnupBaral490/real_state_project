@@ -106,10 +106,21 @@
                 
                 {% if user.is_authenticated %}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-user-circle"></i>{{ user.username }}
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" style="gap: 0.5rem;">
+                            {% if user.profile_photo %}
+                                <img src="{{ user.profile_photo.url }}" alt="{{ user.username }}" class="rounded-circle" style="width: 32px; height: 32px; object-fit: cover; border: 2px solid #f0a500;">
+                            {% else %}
+                                <i class="fas fa-user-circle"></i>
+                            {% endif %}
+                            <span class="d-none d-sm-inline">{{ user.username }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            {% if user.profile_photo %}
+                                <li class="px-3 py-2 text-center mb-2" style="border-bottom: 1px solid #3a3a3c;">
+                                    <img src="{{ user.profile_photo.url }}" alt="{{ user.username }}" class="rounded-circle" style="width: 60px; height: 60px; object-fit: cover; border: 2px solid #f0a500;">
+                                    <p class="mb-0 mt-2 text-white small fw-bold">{{ user.get_full_name|default:user.username }}</p>
+                                </li>
+                            {% endif %}
                             <li><a class="dropdown-item" href="{% url 'profile' %}"><i class="fas fa-user"></i>Profile</a></li>
                             
                             {% if user.role == 'buyer' %}

@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.decorators.http import require_http_methods
-from .forms import CustomUserCreationForm, CustomAuthenticationForm
+from .forms import CustomUserCreationForm, CustomAuthenticationForm, ProfilePhotoForm
 from .models import User
 from agents.models import Agent
 
@@ -72,3 +72,20 @@ def profile(request):
         context['bookings'] = request.user.bookings.all()
     
     return render(request, 'users/profile.html', context)
+
+
+@login_required
+@require_http_methods(["GET", "POST"])
+def edit_profile_photo(request):
+    if request.method == 'POST':
+        form = ProfilePhotoForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile photo updated successfully!')
+            return redirect('profile')
+        else:
+            messages.error(request, 'Error updating profile photo.')
+    else:
+        form = ProfilePhotoForm(instance=request.user)
+    
+    return render(request, 'users/edit_profile_photo.html', {'form': form})

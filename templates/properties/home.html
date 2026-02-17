@@ -32,6 +32,41 @@
     </div>
 </section>
 
+<!-- User Welcome Section (if logged in) -->
+{% if user.is_authenticated %}
+<section class="user-welcome-section bg-gradient-light py-4 py-md-5" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.05) 100%);">
+    <div class="container-fluid px-3 px-md-0">
+        <div class="row align-items-center">
+            <div class="col-12">
+                <div class="d-flex align-items-center justify-content-between gap-3 gap-md-4">
+                    <div class="d-flex align-items-center gap-3">
+                        {% if user.profile_photo %}
+                            <img src="{{ user.profile_photo.url }}" alt="{{ user.get_full_name }}" class="rounded-circle" style="width: 60px; height: 60px; object-fit: cover; border: 3px solid #667eea; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);">
+                        {% else %}
+                            <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center text-white" style="width: 60px; height: 60px; font-size: 28px;">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        {% endif %}
+                        <div>
+                            <h5 class="mb-0 fw-bold">Welcome back, {{ user.get_full_name|default:user.username }}!</h5>
+                            <small class="text-muted">
+                                <span class="badge bg-primary me-2">{{ user.get_role_display_custom }}</span>
+                                <a href="{% url 'edit_profile_photo' %}" style="text-decoration: none; color: #667eea;">
+                                    <i class="fas fa-camera me-1"></i>Update Photo
+                                </a>
+                            </small>
+                        </div>
+                    </div>
+                    <a href="{% url 'profile' %}" class="btn btn-primary btn-sm px-3">
+                        <i class="fas fa-user me-2"></i>View Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
 <!-- Stats Section -->
 <section class="stats-section bg-light py-5">
     <div class="container-fluid px-3 px-md-0">

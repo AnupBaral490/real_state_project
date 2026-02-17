@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
 from django.core.paginator import Paginator
+from django.conf import settings
 from .models import Property, PropertyImage
 from bookings.models import Booking, Inquiry
 from bookings.forms import BookingForm, InquiryForm
@@ -98,6 +99,11 @@ def property_detail(request, pk):
     if request.user.is_authenticated:
         user_booking = property_obj.bookings.filter(user=request.user).first()
     
+    # Split features into list
+    features_list = []
+    if property_obj.features:
+        features_list = [f.strip() for f in property_obj.features.split(',')]
+    
     context = {
         'property': property_obj,
         'images': images,
@@ -105,6 +111,8 @@ def property_detail(request, pk):
         'booking_form': booking_form,
         'inquiry_form': inquiry_form,
         'user_booking': user_booking,
+        'google_maps_key': settings.GOOGLE_MAPS_API_KEY,
+        'features_list': features_list,
     }
     return render(request, 'properties/property_detail.html', context)
 

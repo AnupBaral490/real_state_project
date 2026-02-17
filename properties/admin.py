@@ -20,10 +20,19 @@ class PropertyAdmin(admin.ModelAdmin):
             'fields': ('title', 'agent', 'description')
         }),
         ('Property Details', {
-            'fields': ('property_type', 'bedrooms', 'bathrooms', 'area', 'location')
+            'fields': ('property_type', 'bedrooms', 'bathrooms', 'area', 'location', 'year_built')
         }),
         ('Pricing & Status', {
             'fields': ('price', 'status')
+        }),
+        ('Location & Map', {
+            'fields': ('latitude', 'longitude'),
+            'classes': ('wide',),
+            'description': 'Latitude & Longitude for Google Maps integration. Get coordinates from: https://www.google.com/maps or https://www.latlong.net/'
+        }),
+        ('Features & Amenities', {
+            'fields': ('features',),
+            'description': 'Comma-separated list of amenities (e.g., "Swimming Pool, Garage, Garden, Modern Kitchen")'
         }),
         ('Media', {
             'fields': ('featured_image',)

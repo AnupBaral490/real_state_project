@@ -206,3 +206,9 @@ JAZZMIN_UI_TWEAKS = {
         "success": "btn-success",
     },
 }
+
+# Google Maps API Configuration
+# Get your API key from: https://console.cloud.google.com/
+# and set it as an environment variable or directly here
+import os
+GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY', 'YOUR_GOOGLE_MAPS_API_KEY_HERE')

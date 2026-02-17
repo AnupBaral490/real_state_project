@@ -27,6 +27,12 @@ class Property(models.Model):
     area = models.IntegerField(help_text='Area in square feet')
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='sale')
     featured_image = models.ImageField(upload_to='properties/', null=True, blank=True)
+    # Google Maps Integration
+    latitude = models.FloatField(null=True, blank=True, help_text='Property latitude for Google Maps')
+    longitude = models.FloatField(null=True, blank=True, help_text='Property longitude for Google Maps')
+    # Amenities
+    features = models.TextField(blank=True, help_text='Comma-separated list of features/amenities (e.g., Pool, Garage, Garden)')
+    year_built = models.IntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
