@@ -3,61 +3,356 @@
 
 {% block title %}Home - RealEstate Pro{% endblock %}
 
+
+{% block extra_css %}
+<style>
+
+.hero-section {
+    position: relative;
+    background: url("https://cdn.vectorstock.com/i/500p/15/48/futuristic-housing-concept-vector-40911548.jpg") center center / cover no-repeat;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+}
+
+
+/* Soft dark overlay for readability */
+.hero-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45); /* lighter overlay for premium look */
+    z-index: 0;
+}
+
+/* Keep content above overlay */
+.hero-section .container-fluid {
+    position: relative;
+    z-index: 1;
+}
+
+        .user-welcome-section .badge-role {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 50px;
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+            font-weight: 600;
+            backdrop-filter: blur(6px);
+            animation: floatBadge 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatBadge {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-4px); }
+        }
+
+        /* Subtle Text Fade Animation */
+        .user-welcome-section .welcome-text h5 {
+            animation: fadeSlide 2s ease forwards;
+            opacity: 0;
+        }
+
+        .user-welcome-section .welcome-text small {
+            animation: fadeSlide 2s ease 0.5s forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeSlide {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Profile photo hover glow */
+        .user-welcome-section img.profile-photo {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .user-welcome-section img.profile-photo:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.6);
+        }
+
+        /* View Profile Button Hover */
+        .user-welcome-section .btn-profile {
+            transition: all 0.3s ease;
+        }
+        .user-welcome-section .btn-profile:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(102, 126, 234, 0.3);
+        }
+.user-welcome-section {
+    background: linear-gradient(135deg, rgba(102,126,234,0.05) 0%, rgba(118,75,162,0.03) 100%);
+    border-radius: 20px;
+    padding: 2rem 1rem;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.user-welcome-section:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(102,126,234,0.15);
+}
+
+/* Profile photo hover glow */
+.user-welcome-section img.profile-photo {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.user-welcome-section img.profile-photo:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 20px rgba(102,126,234,0.6);
+}
+
+/* Animated role badge */
+.user-welcome-section .badge-role {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    font-weight: 600;
+    backdrop-filter: blur(6px);
+    animation: floatBadge 3s ease-in-out infinite alternate;
+    box-shadow: 0 4px 12px rgba(102,126,234,0.4);
+}
+
+/* Floating badge animation */
+@keyframes floatBadge {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-4px) scale(1.05); }
+    100% { transform: translateY(0); }
+}
+
+/* Welcome text animation */
+.user-welcome-section .welcome-text h5 {
+    animation: fadeSlide 1.8s ease forwards;
+    opacity: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.user-welcome-section .welcome-text small {
+    animation: fadeSlide 2.2s ease forwards;
+    opacity: 0;
+    font-weight: 500;
+    color: #555;
+}
+
+/* Fade + slide effect keyframes */
+@keyframes fadeSlide {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* View Profile button hover */
+.user-welcome-section .btn-profile {
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #1dd17d, #1caa46);
+    border: none;
+    color: #fff;
+    font-weight: 600;
+}
+.user-welcome-section .btn-profile:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(47, 163, 53, 0.5);
+}
+
+.stats-section {
+    background: #f9f9fb; /* soft light background */
+    padding: 3rem 1rem;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, #80a811 0%, #14c22b 100%);
+    color: #fff;
+    border-radius: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.stat-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 12px 25px rgba(4, 214, 67, 0.3);
+}
+
+.stat-card h3 {
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    position: relative;
+}
+
+/* Optional gradient glow behind number */
+.stat-card h3::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: rgba(255, 255, 255, 0.1);
+    filter: blur(20px);
+    border-radius: 50%;
+}
+
+/* Card subtitle */
+.stat-card p {
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 600;
+    margin-bottom: 0;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+}
+
+/* Responsive grid spacing */
+.stats-section .row {
+    gap: 1rem;
+}
+
+@media (max-width: 768px) {
+    .stat-card {
+        min-height: 180px;
+        padding: 2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .stat-card {
+        padding: 1.5rem;
+        min-height: 150px;
+    }
+}
+
+
+.stats-section {
+    background: #f9f9fb;
+    padding: 4rem 1rem;
+}
+
+.stats-wrapper {
+    display: flex;
+    justify-content: center; /* horizontal alignment */
+    gap: 8rem; /* space between items */
+    flex-wrap: wrap; /* wrap on small screens */
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column; /* number above label */
+    align-items: center;
+    padding: 0 7rem; /* horizontal padding for extra gap */
+}
+
+.stat-number {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    color: #f8814a;
+    background: linear-gradient(135deg, #030303, #070607);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.stat-label {
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    font-weight: 600;
+    color: #333;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .stats-wrapper {
+        gap: 2rem; /* smaller gap on mobile */
+    }
+}
+
+</style>
+{% endblock %}
+
 {% block content %}
-<!-- Hero Section -->
-<section class="hero-section bg-gradient text-white py-5">
-    <div class="container-fluid px-3 px-md-0">
-        <div class="row align-items-center py-3 py-md-5">
-            <div class="col-12 col-md-6 mb-4 mb-md-0">
-                <h1 class="display-4 fw-bold mb-3" style="font-size: clamp(1.75rem, 5vw, 3.5rem);">Find Your Dream Property</h1>
-                <p class="lead mb-4" style="font-size: clamp(1rem, 3vw, 1.25rem);">Discover amazing properties from trusted agents. Start your real estate journey with us today.</p>
+<section class="hero-section text-white d-flex align-items-center"
+         style="
+            
+             background-size: cover; 
+             background-position: center; 
+             background-repeat: no-repeat; 
+             height: 500px;">
+    <div class="container text-center">
+        <div class="row w-100">
+            <div class="col-12">
+                <h1 class="display-4 mb-3"
+    style="
+        font-size: clamp(1.75rem, 5vw, 3.5rem); 
+        font-weight: 800; 
+        background: linear-gradient(90deg, #3d921b, #d35913); 
+        -webkit-background-clip: text; 
+        -webkit-text-fill-color: transparent; 
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    ">
+    Find Your Dream Property
+</h1>
+
+<p class="lead mb-4"
+    style="
+        font-size: clamp(1rem, 3vw, 1.25rem); 
+        font-weight: 600; 
+        color: #503b27; 
+        text-shadow: 1px 1px 1px rgba(65, 6, 6, 0.1);
+    ">
+    Discover amazing properties from trusted agents. 
+    Start your real estate journey with us today.
+</p>
                 
-                <div class="input-group input-group-lg mb-3 mb-md-4">
-                    <input type="text" class="form-control form-control-lg" placeholder="Search by location..." id="searchInput">
+                <div class="input-group input-group-lg mb-3 mb-md-4 justify-content-center">
+                    <input type="text" class="form-control form-control-lg" placeholder="Search by location..." id="searchInput" style="max-width:300px;">
                     <a href="{% url 'property_list' %}" class="btn btn-light">
                         <i class="fas fa-search"></i>
                     </a>
                 </div>
                 
-                <div class="d-flex flex-column flex-sm-row gap-2">
-                    <a href="{% url 'property_list' %}" class="btn btn-light btn-lg w-100 w-sm-auto">
+                <div class="d-flex flex-column flex-sm-row gap-2 justify-content-center" style="position: relative; z-index: 2;">
+                    <a href="{% url 'property_list' %}" class="btn btn-light btn-lg">
                         <i class="fas fa-search me-2"></i>Browse Properties
                     </a>
                 </div>
             </div>
-            <div class="col-12 col-md-6 text-center d-none d-md-block">
-                <i class="fas fa-home" style="font-size: clamp(80px, 20vw, 150px); opacity: 0.2;"></i>
-            </div>
         </div>
     </div>
 </section>
-
 <!-- User Welcome Section (if logged in) -->
 {% if user.is_authenticated %}
-<section class="user-welcome-section bg-gradient-light py-4 py-md-5" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.05) 100%);">
+<section class="user-welcome-section bg-gradient-light py-4 py-md-5">
     <div class="container-fluid px-3 px-md-0">
         <div class="row align-items-center">
             <div class="col-12">
                 <div class="d-flex align-items-center justify-content-between gap-3 gap-md-4">
                     <div class="d-flex align-items-center gap-3">
                         {% if user.profile_photo %}
-                            <img src="{{ user.profile_photo.url }}" alt="{{ user.get_full_name }}" class="rounded-circle" style="width: 60px; height: 60px; object-fit: cover; border: 3px solid #667eea; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);">
+                            <img src="{{ user.profile_photo.url }}" alt="{{ user.get_full_name }}" class="rounded-circle profile-photo" style="width: 60px; height: 60px; object-fit: cover; border: 3px solid #667eea; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);">
                         {% else %}
                             <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center text-white" style="width: 60px; height: 60px; font-size: 28px;">
                                 <i class="fas fa-user"></i>
                             </div>
                         {% endif %}
-                        <div>
+
+                        <!-- Add welcome-text class here -->
+                        <div class="welcome-text">
                             <h5 class="mb-0 fw-bold">Welcome back, {{ user.get_full_name|default:user.username }}!</h5>
                             <small class="text-muted">
-                                <span class="badge bg-primary me-2">{{ user.get_role_display_custom }}</span>
+                                <!-- Add badge-role class here -->
+                                <span class="badge-role me-2">{{ user.get_role_display_custom }}</span>
                                 <a href="{% url 'edit_profile_photo' %}" style="text-decoration: none; color: #667eea;">
                                     <i class="fas fa-camera me-1"></i>Update Photo
                                 </a>
                             </small>
                         </div>
                     </div>
-                    <a href="{% url 'profile' %}" class="btn btn-primary btn-sm px-3">
+
+                    <a href="{% url 'profile' %}" class="btn btn-primary btn-sm px-3 btn-profile">
                         <i class="fas fa-user me-2"></i>View Profile
                     </a>
                 </div>
@@ -68,26 +363,25 @@
 {% endif %}
 
 <!-- Stats Section -->
-<section class="stats-section bg-light py-5">
-    <div class="container-fluid px-3 px-md-0">
-        <div class="row g-3 g-md-4">
-            <div class="col-12 col-sm-6 col-lg-4">
-                <div class="stat-card h-100 p-4 p-md-5">
-                    <h3 class="display-5 fw-bold text-primary" style="font-size: clamp(1.75rem, 4vw, 2.5rem);">{{ total_properties }}</h3>
-                    <p class="text-muted fw-600">Total Properties</p>
-                </div>
+<section class="stats-section py-5">
+    <div class="container text-center">
+        <div class="stats-wrapper d-flex justify-content-center flex-wrap gap-4">
+            <!-- Total Properties -->
+            <div class="stat-item">
+                <h3 class="stat-number">{{ total_properties }}</h3>
+                <p class="stat-label">Total Properties</p>
             </div>
-            <div class="col-12 col-sm-6 col-lg-4">
-                <div class="stat-card h-100 p-4 p-md-5">
-                    <h3 class="display-5 fw-bold text-primary" style="font-size: clamp(1.75rem, 4vw, 2.5rem);">{{ total_agents }}</h3>
-                    <p class="text-muted fw-600">Professional Agents</p>
-                </div>
+
+            <!-- Professional Agents -->
+            <div class="stat-item">
+                <h3 class="stat-number">{{ total_agents }}</h3>
+                <p class="stat-label">Professional Agents</p>
             </div>
-            <div class="col-12 col-sm-6 col-lg-4">
-                <div class="stat-card h-100 p-4 p-md-5">
-                    <h3 class="display-5 fw-bold text-primary" style="font-size: clamp(1.75rem, 4vw, 2.5rem);">24/7</h3>
-                    <p class="text-muted fw-600">Customer Support</p>
-                </div>
+
+            <!-- Customer Support -->
+            <div class="stat-item">
+                <h3 class="stat-number">24/7</h3>
+                <p class="stat-label">Customer Support</p>
             </div>
         </div>
     </div>
@@ -175,7 +469,7 @@
 </section>
 
 <!-- CTA Section -->
-<section class="cta-section bg-primary text-white py-5">
+<section class="cta-section text-white py-5">
     <div class="container-fluid px-3 px-md-0">
         <div class="text-center">
             <h2 class="display-5 fw-bold mb-3 mb-md-4" style="font-size: clamp(1.75rem, 5vw, 2.5rem);">Ready to Find Your Perfect Home?</h2>
@@ -201,38 +495,4 @@
 
 {% endblock %}
 
-{% block extra_css %}
-<style>
-    .hero-section {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 500px;
-    }
-    
-    .stat-card {
-        padding: 20px;
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    
-    .property-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border: none;
-    }
-    
-    .property-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
-    }
-    
-    .img-cover {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    
-    .hover-shadow {
-        transition: all 0.3s ease;
-    }
-</style>
-{% endblock %}
+
